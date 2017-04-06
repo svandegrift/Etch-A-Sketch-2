@@ -6,7 +6,7 @@ int inByte = 0;   // incoming serial byte
 void setup()
 {
  // start serial port at 9600 bps:
- Serial.begin(9600);
+ Serial.begin(57600);
  while (!Serial) {
  ; // wait for serial port to connect. Needed for Leonardo only
  }
@@ -38,7 +38,10 @@ void loop()
 }
 void establishContact() {
  while (Serial.available() <= 0) {
- Serial.print('A'); // send a capital A
+ Serial.print('A');// send a capital A
+ Serial.print(inByte);
+ Serial.print(",");
+ Serial.print(secondSensor);
  delay(300);
  }
 }

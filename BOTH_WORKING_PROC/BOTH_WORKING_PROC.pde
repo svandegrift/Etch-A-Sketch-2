@@ -1,11 +1,11 @@
 // This example code is in the public domain.
+//yo yoo
 import processing.serial.*;
-int bgcolor;   // Background color
-int fgcolor;   // Fill color
+
 Serial myPort;      // The serial port
 int[] serialInArray = new int[3]; // Where we'll put what we receive
 int serialCount = 0;     // A count of how many bytes we receive
-int xpos, ypos;     // Starting position of the ball
+float xpos, ypos;     // Starting position of the ball
 boolean firstContact = false;  // Whether we've heard from the
           // microcontroller
 void setup() {
@@ -20,11 +20,17 @@ void setup() {
  // On Windows machines, this generally opens COM1.
  // Open whatever port is the one you're using.
  String portName = Serial.list()[2];
- myPort = new Serial(this, portName, 9600);
+ myPort = new Serial(this, portName, 57600);
 }
 void draw() {
   fill(0);
   ellipse(xpos, ypos, 2, 2); 
+}
+void keyReleased() {
+  println();
+  if (key == 'a' || key == 'A'){
+    background(255);
+  }
 }
 void serialEvent(Serial myPort) {
  // read a byte from the serial port:
@@ -46,11 +52,11 @@ void serialEvent(Serial myPort) {
  serialCount++;
  // If we have 3 bytes:
  if (serialCount >= 2 ) {
-  xpos = serialInArray[0];
-  ypos = serialInArray[1];
+  xpos = map(serialInArray[0], 0, 1023, 0, width);
+  ypos = map(serialInArray[1], 0, 1023, 0, width);
   //fgcolor = serialInArray[2];
   // print the values (for debugging purposes only):
-  println(xpos + " " + ypos + " " + fgcolor);
+  println(xpos + " " + ypos);
   // Send a capital A to request new sensor readings:
   myPort.write('A');
   // Reset serialCount:
